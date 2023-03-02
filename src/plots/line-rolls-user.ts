@@ -11,7 +11,7 @@ async function plot(prisma, chartJSNodeCanvas) {
             }
         });
 
-        if (rolls.length === 0) {
+        if (rolls.length === 0 || rolls.length === 1) {
             continue;
         }
 
