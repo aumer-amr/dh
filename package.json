@@ -1,12 +1,19 @@
 {
   "name": "dh",
   "version": "1.0.0",
+  "description": "Tool to generate graphs based on rolls from within the DH discord channel.",
+  "repository": "https://github.com/aumer-amr/dh.git",
+  "author": "aumer-amr <aumer@aumer.dev>",
   "main": "index.js",
-  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=18.13.0"
+  },
+  "license": "GNU GPL v3.0",
   "scripts": {
     "plot": "ts-node src/index.ts",
     "import": "ts-node src/import.ts",
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --check .",
@@ -18,8 +25,8 @@
     "prisma:migrate": "prisma migrate dev --name init"
   },
   "devDependencies": {
-    "@types/node": "^18.14.4",
     "@types/lodash": "^4.14.191",
+    "@types/node": "^18.14.4",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
     "eslint": "^8.31.0",
@@ -36,6 +43,7 @@
     "chartjs-chart-matrix": "^2.0.1",
     "chartjs-node-canvas": "^4.1.6",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "commander": "^10.0.0",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21"

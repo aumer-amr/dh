@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
+import { program } from 'commander';
 import * as dotenv from 'dotenv';
 import { mkdir, stat } from 'node:fs/promises';
 import * as plots from './plots';
+import packageJson from '../package.json';
+
 dotenv.config();
 
 const prisma = new PrismaClient({
@@ -10,6 +13,22 @@ const prisma = new PrismaClient({
 });
 
 async function main(): Promise<void> {
+    program.name(packageJson.name)
+        .description(packageJson.description)
+        .version(packageJson.version);
+
+    program.option('-p, --plot <plot>', 'Plot to run');
+    program.option('-a, --all', 'Run all plots');
+
+    program.parse(process.argv);
+    
+    const options = program.opts();
+    if (options.all) return await runAllPlots();
+
+    program.help();
+}
+
+async function runAllPlots(): Promise<void> {
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
         width: 800,
         height: 600,
@@ -34,8 +53,6 @@ async function main(): Promise<void> {
 
         await plotClass.plot(prisma, chartJSNodeCanvas);
     }
-
-    
 }
 
 main();
