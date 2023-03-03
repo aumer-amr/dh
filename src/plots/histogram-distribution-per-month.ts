@@ -3,7 +3,7 @@ import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import _ from 'lodash';
-import { Plot } from './plot';
+import { Plot } from '../interfaces/plot';
 
 class HistogramDistributionPerMonth extends Plot {
 

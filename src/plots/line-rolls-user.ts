@@ -1,7 +1,7 @@
 import { PrismaClient, Roll, User } from '@prisma/client';
 import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { Plot } from './plot';
+import { Plot } from '../interfaces/plot';
 
 class LineRollsUser extends Plot {
 
