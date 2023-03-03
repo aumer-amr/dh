@@ -39,7 +39,7 @@ async function main(): Promise<void> {
                 if (dice === '12') {
                     await prisma.roll.create({
                         data: {
-                            createdAt: new Date(date),
+                            createdAt: parseDate(date),
                             roll: parseInt(roll),
                             user: { connect: { id: user.id } }
                         },
@@ -51,6 +51,11 @@ async function main(): Promise<void> {
 
             console.log('CSV file successfully processed');
         });
+}
+
+function parseDate(date: string): Date {
+    const [month, day, year] = date.split('/').map(d => parseInt(d));
+    return new Date(year, month - 1, day, 1, 0, 0);
 }
 
 main();

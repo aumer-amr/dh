@@ -15,7 +15,7 @@ class HistogramDistributionPerMonth extends Plot {
             by: ['roll', 'createdAt']
         });
 
-        const countByMonthAndDice = countByRolls.flatMap(r => [{ count: r._count.roll, dice: r.roll, month: r.createdAt.toLocaleString('default', { month: 'long' }) }]);
+        const countByMonthAndDice = countByRolls.flatMap(r => [{ count: r._count.roll, dice: r.roll, month: r.createdAt.toLocaleString('default', { month: 'long', timeZone: 'UTC' }) }]);
         const countPerMonth = countByMonthAndDice.reduce((accumulator, currentValue) => {
             if (!accumulator.find(p => p.dice == currentValue.dice)) {
                 accumulator = [
