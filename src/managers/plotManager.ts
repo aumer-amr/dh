@@ -8,9 +8,20 @@ import { Plot } from '../interfaces/plot';
 import { AvailablePlots } from '../interfaces/plotManager';
 import { factory } from '../logger';
 import * as plots from '../plots';
+import namePlugin from '../plugins/namePlugin';
 
 const prisma = new PrismaClient({
     errorFormat: 'pretty',
+});
+
+const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
+    width: 840,
+    height: 640,
+    backgroundColour: '#ffffff',
+    chartCallback: (ChartJS) => {
+        ChartJS.defaults.layout.padding = 20;
+        ChartJS.register(namePlugin);
+    }
 });
 
 const logger = factory('PlotManager');
@@ -94,12 +105,6 @@ export class PlotManager implements Manager {
                 throw e;
             }
         }
-
-        const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
-            width: 800,
-            height: 600,
-            backgroundColour: '#ffffff',
-        });
 
         const configManager = ConfigManager.getManager();
         configManager.setConfig(plot, plotConfig);
