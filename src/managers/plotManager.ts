@@ -2,11 +2,14 @@ import { PrismaClient } from '@prisma/client';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { mkdir, stat } from 'node:fs/promises';
 import { AvailablePlots } from '../interfaces/plotManager';
+import { factory } from '../logger';
 import * as plots from '../plots';
 
 const prisma = new PrismaClient({
     errorFormat: 'pretty',
 });
+
+const logger = factory('PlotManager');
 
 export class PlotManager {
 
@@ -33,9 +36,9 @@ export class PlotManager {
     }
 
     public async listPlots(): Promise<void> {
-        console.log('Available plots:');
+        logger.info('Available plots:');
         for (const plot of Object.values(this.availablePlots)) {
-            console.log(`- ${plot.name}`);
+            logger.info(`- ${plot.name}`);
         }
     }
 
@@ -48,11 +51,11 @@ export class PlotManager {
     public async runPlot(name: string): Promise<void> {
         const plot = this.availablePlots[name];
         if (!plot) {
-            console.error(`Plot ${name} not found`);
+            logger.error(`Plot ${name} not found`);
             return;
         }
 
-        console.log(`Plotting ${plot.name}`);
+        logger.info(`Plotting ${plot.name}`);
 
         try {
             await stat(`./images/${plot.name}`);

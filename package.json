@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
+    "chalk": "^4.1.2",
     "chart.js": "3.9.1",
     "chartjs-chart-matrix": "^2.0.1",
     "chartjs-node-canvas": "^4.1.6",
@@ -46,6 +47,7 @@
     "commander": "^10.0.0",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.0.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "winston": "^3.8.2"
   }
 }
