@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "plot": "ts-node src/plot.ts",
+    "plot": "ts-node src/index.ts",
     "import": "ts-node src/import.ts",
     "build": "tsc --project tsconfig.json",
     "prisma": "prisma",
@@ -21,9 +21,13 @@
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
+    "@types/lodash": "^4.14.191",
     "chart.js": "3.9.1",
+    "chartjs-chart-matrix": "^2.0.1",
     "chartjs-node-canvas": "^4.1.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "csv-parser": "^3.0.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "lodash": "^4.17.21"
   }
 }

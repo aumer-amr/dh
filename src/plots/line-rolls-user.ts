@@ -1,52 +1,59 @@
 import { ChartType } from 'chart.js';
-import { writeFileSync } from 'fs';
+import { PrismaClient, Roll, User } from '@prisma/client';
+import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
+import { Plot } from './plot';
 
-async function plot(prisma, chartJSNodeCanvas) {
-    const users = await prisma.user.findMany();
+class LineRollsUser extends Plot {
 
-    for await (const user of users) {
-        const rolls = await prisma.roll.findMany({
-            where: {
-                userId: user.id
+    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas) {
+        const users: User[] = await prisma.user.findMany();
+    
+        for await (const user of users) {
+            const rolls: Roll[] = await prisma.roll.findMany({
+                where: {
+                    userId: user.id
+                },
+                orderBy: {
+                    createdAt: 'asc'
+                }
+            });
+    
+            if (rolls.length === 0 || rolls.length === 1) {
+                continue;
             }
-        });
-
-        if (rolls.length === 0 || rolls.length === 1) {
-            continue;
-        }
-
-        const labels = rolls.map(roll => roll.createdAt.toISOString().split('T')[0]);
-        const data = rolls.map(roll => roll.roll);
-
-        const ChartT = 'line' as ChartType;
-
-        const configuration = {
-            type: ChartT,
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Rolls',
-                    data,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: `Rolls for ${user.name}`
+    
+            const labels = rolls.map((roll: Roll) => roll.createdAt.toISOString().split('T')[0]);
+            const data = rolls.map((roll: Roll) => roll.roll);
+    
+            const ChartT = 'line' as ChartType;
+    
+            const configuration = {
+                type: ChartT,
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Rolls',
+                        data,
+                        fill: false,
+                        borderColor: 'rgb(6, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Rolls for ${user.name}`
+                        }
                     }
                 }
-            }
-        };
-
-        const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-
-        const cleanFileName = user.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        writeFileSync(`./images/line_rolls_user/${cleanFileName}.png`, buffer);
+            };
+    
+            const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+            await this.writeBuffer(buffer, user.name);
+        }
     }
+
 }
 
-export default plot;
+export default LineRollsUser;
