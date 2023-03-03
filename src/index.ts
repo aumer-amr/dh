@@ -1,15 +1,15 @@
 import { PrismaClient } from '@prisma/client';
-import * as dotenv from 'dotenv';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
+import * as dotenv from 'dotenv';
+import { mkdir, stat } from 'node:fs/promises';
 import * as plots from './plots';
-import { stat, mkdir } from 'fs/promises';
 dotenv.config();
 
 const prisma = new PrismaClient({
     errorFormat: 'pretty',
 });
 
-async function main() {
+async function main(): Promise<void> {
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
         width: 800,
         height: 600,

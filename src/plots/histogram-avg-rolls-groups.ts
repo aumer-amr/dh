@@ -1,9 +1,9 @@
-import { ChartType } from 'chart.js';
 import { PrismaClient } from '@prisma/client';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { Plot } from './plot';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import _ from 'lodash';
+import { Plot } from './plot';
 
 type DataGroup = {
     low: number;
@@ -15,7 +15,7 @@ type DataGroup = {
 
 class HistogramAvgRollsGroups extends Plot {
 
-    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas) {
+    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas): Promise<void> {
         const groups = await this.generateGroups(prisma);
 
         const labels = groups.map(dataGroup => `${dataGroup.low} - ${dataGroup.high}`);
@@ -63,8 +63,8 @@ class HistogramAvgRollsGroups extends Plot {
                     },
                     datalabels: {
                         color: '#000000',
-                        anchor: "end" as "start" | "end" | "center",
-                        align: "end" as "start" | "end" | "center",
+                        anchor: 'end' as 'start' | 'end' | 'center',
+                        align: 'end' as 'start' | 'end' | 'center',
                         display: 'auto'
                     }
                 }

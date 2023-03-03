@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { createReadStream } from 'fs';
 import csv from 'csv-parser';
 import * as dotenv from 'dotenv';
+import { createReadStream } from 'node:fs';
 dotenv.config();
 
 const prisma = new PrismaClient({
@@ -10,7 +10,7 @@ const prisma = new PrismaClient({
 
 const data = [];
 
-async function main() {
+async function main(): Promise<void> {
     createReadStream('data/data.csv')
         .pipe(csv())
         .on('data', async (row) => {
@@ -47,7 +47,7 @@ async function main() {
                     
                     console.log(`Created roll for ${name} with roll ${roll} and dice ${dice} on ${date}`);
                 }
-            };
+            }
 
             console.log('CSV file successfully processed');
         });

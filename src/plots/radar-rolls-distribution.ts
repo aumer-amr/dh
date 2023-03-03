@@ -1,13 +1,13 @@
-import { ChartType } from 'chart.js';
 import { PrismaClient } from '@prisma/client';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
-import { Plot } from './plot';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import _ from 'lodash';
+import { Plot } from './plot';
 
 class RadarRollsAmount extends Plot {
 
-    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas) {
+    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas): Promise<void> {
         const labels = Array.from({ length: 12 }, (_, i) => ++i);
         
         const countByRolls = await prisma.roll.groupBy({
@@ -37,8 +37,8 @@ class RadarRollsAmount extends Plot {
                     datalabels: {
                         offset: 4,
                         color: '#ff0000',
-                        align: "end" as "end",
-                        anchor: "end" as "end"
+                        align: 'end' as const,
+                        anchor: 'end' as const
                     }
                 }]
             },

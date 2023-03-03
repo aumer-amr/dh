@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Plot } from './plot';
 import _ from 'lodash';
-import { ChartType } from 'chart.js';
+import { Plot } from './plot';
 
 class HistogramDistributionPerMonth extends Plot {
 
-    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas) {
+    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas): Promise<void> {
         const countByRolls = await prisma.roll.groupBy({
             _count: {
                 roll: true
@@ -83,8 +83,8 @@ class HistogramDistributionPerMonth extends Plot {
                     },
                     datalabels: {
                         color: '#000000',
-                        anchor: "end" as "start" | "end" | "center",
-                        align: "end" as "start" | "end" | "center"
+                        anchor: 'end' as 'start' | 'end' | 'center',
+                        align: 'end' as 'start' | 'end' | 'center'
                     }
                 }
             }

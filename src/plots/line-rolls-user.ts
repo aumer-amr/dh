@@ -1,11 +1,11 @@
-import { ChartType } from 'chart.js';
 import { PrismaClient, Roll, User } from '@prisma/client';
+import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { Plot } from './plot';
 
 class LineRollsUser extends Plot {
 
-    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas) {
+    public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas): Promise<void> {
         const users: User[] = await prisma.user.findMany();
     
         for await (const user of users) {
