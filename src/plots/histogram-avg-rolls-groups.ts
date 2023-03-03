@@ -3,6 +3,7 @@ import { ChartType } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import _ from 'lodash';
+import { PlotConfigOption } from '../interfaces/config';
 import { Plot } from '../interfaces/plot';
 
 type DataGroup = {
@@ -14,6 +15,16 @@ type DataGroup = {
 }
 
 class HistogramAvgRollsGroups extends Plot {
+
+    public options(): PlotConfigOption[] {
+        return [{
+            name: 'groupSize',
+            description: 'The size of the group',
+            type: 'number',
+            default: 10,
+            required: false
+        }];
+    }
 
     public async plot(prisma: PrismaClient, chartJSNodeCanvas: ChartJSNodeCanvas): Promise<void> {
         const groups = await this.generateGroups(prisma);
@@ -76,7 +87,7 @@ class HistogramAvgRollsGroups extends Plot {
     }
 
     private async generateGroups(prisma: PrismaClient): Promise<DataGroup[]> {
-        const groupSize = 10;
+        const groupSize = this.configManager.getConfig('groupSize');
 
         const maxRollRecords = await prisma.roll.groupBy({
             by: ['userId'],
