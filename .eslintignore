@@ -2,5 +2,6 @@
 /.cache
 /.git
 /data
+/dist
 /images
 /node_modules

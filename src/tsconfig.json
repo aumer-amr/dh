@@ -6,8 +6,8 @@
       "lib": ["es2021", "dom"],
       "declaration": true,
       "sourceMap": true,
-      "outDir": "./dist",
-      "rootDir": "./src",
+      "outDir": "../dist",
+      "rootDir": "./",
       "strict": false,
       "moduleResolution": "node",
       "esModuleInterop": true,
@@ -21,7 +21,7 @@
   },
   "exclude": ["dist", "node_modules", "tests"],
   "include": [
-      "src/**/*.ts"
+      "./**/*.ts"
   ],
   "references": [
     { "path": "../"}

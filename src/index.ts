@@ -1,16 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { program } from 'commander';
 import * as dotenv from 'dotenv';
-import { mkdir, stat } from 'node:fs/promises';
-import * as plots from './plots';
+import { PlotManager } from './managers/plotManager';
 import packageJson from '../package.json';
 
 dotenv.config();
-
-const prisma = new PrismaClient({
-    errorFormat: 'pretty',
-});
 
 async function main(): Promise<void> {
     program.name(packageJson.name)
@@ -19,40 +12,18 @@ async function main(): Promise<void> {
 
     program.option('-p, --plot <plot>', 'Plot to run');
     program.option('-a, --all', 'Run all plots');
+    program.option('-l, --list', 'List all available plots');
 
     program.parse(process.argv);
+
+    const plotManager = PlotManager.runManager();
     
     const options = program.opts();
-    if (options.all) return await runAllPlots();
+    if (options.all) return await plotManager.runAllPlots();
+    if (options.plot) return await plotManager.runPlot(options.plot);
+    if (options.list) return await plotManager.listPlots();
 
     program.help();
-}
-
-async function runAllPlots(): Promise<void> {
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
-        width: 800,
-        height: 600,
-        backgroundColour: '#ffffff',
-    });
-
-    for await (const plot of Object.values(plots)) {
-        const plotClass = new plot.default();
-
-        console.log(`Plotting ${plotClass.name}`);
-
-        try {
-            await stat(`./images/${plotClass.name}`);
-        } catch (e) {
-            if (e.code === 'ENOENT') {
-                mkdir(`./images/${plotClass.name}`);
-            }
-            else {
-                throw e;
-            }
-        }
-
-        await plotClass.plot(prisma, chartJSNodeCanvas);
-    }
 }
 
 main();
