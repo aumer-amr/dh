@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { mkdir, stat } from 'node:fs/promises';
+import { rm } from 'node:fs/promises';
 import { ConfigManager } from './configManager';
 import { PlotConfig } from '../interfaces/config';
 import { Manager } from '../interfaces/managers';
@@ -58,6 +59,12 @@ export class PlotManager implements Manager {
         }
     }
 
+    public async clean(): Promise<void> {
+        logger.info('Cleaning plots');
+
+        await rm('./images/', { recursive: true, force: true });
+    }
+
     public async listPlots(): Promise<void> {
         const configManager = ConfigManager.getManager();
 
@@ -94,6 +101,17 @@ export class PlotManager implements Manager {
         }
 
         logger.info(`Plotting ${plot.name}`);
+
+        try {
+            await stat(`./images`);
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+                mkdir(`./images`);
+            }
+            else {
+                throw e;
+            }
+        }
 
         try {
             await stat(`./images/${plot.name}`);

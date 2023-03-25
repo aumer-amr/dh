@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,4 +22,11 @@ model User {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   rolls     Roll[]
+}
+
+model Files {
+  id           String      @id
+  name         String
+  modifiedTime String
+  createdAt    DateTime @default(now())
 }

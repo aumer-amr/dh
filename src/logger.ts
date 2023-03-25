@@ -1,5 +1,10 @@
 import chalk from 'chalk';
+import { Webhook } from 'discord-webhook-node';
+import * as dotenv from 'dotenv';
 import { createLogger, format, transports } from 'winston';
+dotenv.config();
+
+const hook = new Webhook(process.env.DISCORD_WEBHOOK_URL);
 
 export function factory(name: string): any {
     return createLogger({
@@ -12,6 +17,12 @@ export function factory(name: string): any {
             }),
             format.colorize(),
             format.printf(({ timestamp, level, message, metadata }) => {
+                if (level.includes('error')) {
+                    hook.error(metadata.service, 'error', message);
+                }
+                else if (level.includes('warn')) {
+                    hook.warning(metadata.service, 'warning', message);
+                }
                 return `${timestamp} [${chalk.cyan(metadata.service)}] [${level}]: ${message}`;
             })
         ),
